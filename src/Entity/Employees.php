@@ -88,6 +88,9 @@ class Employees
     #[ORM\OneToMany(mappedBy: 'employees', targetEntity: Promotion::class)]
     private Collection $promotion;
 
+    #[ORM\ManyToMany(targetEntity: Memo::class, inversedBy: 'employees')]
+    private Collection $memo;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -98,6 +101,7 @@ class Employees
         $this->product = new ArrayCollection();
         $this->point_sale = new ArrayCollection();
         $this->promotion = new ArrayCollection();
+        $this->memo = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -479,6 +483,30 @@ class Employees
                 $promotion->setEmployees(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Memo>
+     */
+    public function getMemo(): Collection
+    {
+        return $this->memo;
+    }
+
+    public function addMemo(Memo $memo): self
+    {
+        if (!$this->memo->contains($memo)) {
+            $this->memo->add($memo);
+        }
+
+        return $this;
+    }
+
+    public function removeMemo(Memo $memo): self
+    {
+        $this->memo->removeElement($memo);
 
         return $this;
     }
