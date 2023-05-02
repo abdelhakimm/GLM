@@ -28,9 +28,13 @@ class Bill
     #[ORM\OneToMany(mappedBy: 'bill', targetEntity: Product::class)]
     private Collection $products;
 
+    #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, mappedBy: 'bill')]
+    private Collection $purchaseRequests;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->purchaseRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,6 +103,33 @@ class Bill
             if ($product->getBill() === $this) {
                 $product->setBill(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PurchaseRequest>
+     */
+    public function getPurchaseRequests(): Collection
+    {
+        return $this->purchaseRequests;
+    }
+
+    public function addPurchaseRequest(PurchaseRequest $purchaseRequest): self
+    {
+        if (!$this->purchaseRequests->contains($purchaseRequest)) {
+            $this->purchaseRequests->add($purchaseRequest);
+            $purchaseRequest->addBill($this);
+        }
+
+        return $this;
+    }
+
+    public function removePurchaseRequest(PurchaseRequest $purchaseRequest): self
+    {
+        if ($this->purchaseRequests->removeElement($purchaseRequest)) {
+            $purchaseRequest->removeBill($this);
         }
 
         return $this;
