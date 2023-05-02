@@ -58,10 +58,14 @@ class Employees
     #[ORM\JoinColumn(nullable: false)]
     private ?Contract $contract = null;
 
+    #[ORM\ManyToMany(targetEntity: Holidays::class, inversedBy: 'employees')]
+    private Collection $holidays;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
         $this->meeting = new ArrayCollection();
+        $this->holidays = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -251,6 +255,30 @@ class Employees
     public function setContract(Contract $contract): self
     {
         $this->contract = $contract;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Holidays>
+     */
+    public function getHolidays(): Collection
+    {
+        return $this->holidays;
+    }
+
+    public function addHoliday(Holidays $holiday): self
+    {
+        if (!$this->holidays->contains($holiday)) {
+            $this->holidays->add($holiday);
+        }
+
+        return $this;
+    }
+
+    public function removeHoliday(Holidays $holiday): self
+    {
+        $this->holidays->removeElement($holiday);
 
         return $this;
     }
