@@ -34,6 +34,10 @@ class Applicant
     #[ORM\ManyToMany(targetEntity: JobOffer::class, inversedBy: 'applicants')]
     private Collection $job_offer;
 
+    #[ORM\OneToOne(inversedBy: 'applicant', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address = null;
+
     public function __construct()
     {
         $this->job_offer = new ArrayCollection();
@@ -124,6 +128,18 @@ class Applicant
     public function removeJobOffer(JobOffer $jobOffer): self
     {
         $this->job_offer->removeElement($jobOffer);
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

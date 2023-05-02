@@ -24,6 +24,9 @@ class Address
 
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: Employees::class)]
     private Collection $employees;
+
+    #[ORM\OneToOne(mappedBy: 'address', cascade: ['persist', 'remove'])]
+    private ?Applicant $applicant = null;
     
     public function getId(): ?int
     {
@@ -74,6 +77,23 @@ class Address
     public function setEmployees(?Employees $employees): self
     {
         $this->employees = $employees;
+
+        return $this;
+    }
+
+    public function getApplicant(): ?Applicant
+    {
+        return $this->applicant;
+    }
+
+    public function setApplicant(Applicant $applicant): self
+    {
+        // set the owning side of the relation if necessary
+        if ($applicant->getAddress() !== $this) {
+            $applicant->setAddress($this);
+        }
+
+        $this->applicant = $applicant;
 
         return $this;
     }
