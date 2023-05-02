@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PointOfSaleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PointOfSaleRepository::class)]
@@ -15,6 +17,14 @@ class PointOfSale
 
     #[ORM\Column(length: 20)]
     private ?string $name_varchar = null;
+
+    #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'point_sale')]
+    private Collection $employees;
+
+    public function __construct()
+    {
+        $this->employees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -29,6 +39,33 @@ class PointOfSale
     public function setNameVarchar(string $name_varchar): self
     {
         $this->name_varchar = $name_varchar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employees>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employees $employee): self
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->addPointSale($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employees $employee): self
+    {
+        if ($this->employees->removeElement($employee)) {
+            $employee->removePointSale($this);
+        }
 
         return $this;
     }
