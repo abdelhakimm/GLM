@@ -22,6 +22,10 @@ class BudgetCompany
     #[ORM\Column(length: 100)]
     private ?string $service = null;
 
+    #[ORM\ManyToOne(inversedBy: 'budgetCompanies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Report $report = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class BudgetCompany
     public function setService(string $service): self
     {
         $this->service = $service;
+
+        return $this;
+    }
+
+    public function getReport(): ?Report
+    {
+        return $this->report;
+    }
+
+    public function setReport(?Report $report): self
+    {
+        $this->report = $report;
 
         return $this;
     }

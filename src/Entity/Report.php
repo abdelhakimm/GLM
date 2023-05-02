@@ -31,9 +31,13 @@ class Report
     #[ORM\OneToMany(mappedBy: 'report', targetEntity: Employees::class)]
     private Collection $employees;
 
+    #[ORM\OneToMany(mappedBy: 'report', targetEntity: BudgetCompany::class)]
+    private Collection $budgetCompanies;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
+        $this->budgetCompanies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +117,36 @@ class Report
             // set the owning side to null (unless already changed)
             if ($employee->getReport() === $this) {
                 $employee->setReport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BudgetCompany>
+     */
+    public function getBudgetCompanies(): Collection
+    {
+        return $this->budgetCompanies;
+    }
+
+    public function addBudgetCompany(BudgetCompany $budgetCompany): self
+    {
+        if (!$this->budgetCompanies->contains($budgetCompany)) {
+            $this->budgetCompanies->add($budgetCompany);
+            $budgetCompany->setReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBudgetCompany(BudgetCompany $budgetCompany): self
+    {
+        if ($this->budgetCompanies->removeElement($budgetCompany)) {
+            // set the owning side to null (unless already changed)
+            if ($budgetCompany->getReport() === $this) {
+                $budgetCompany->setReport(null);
             }
         }
 
