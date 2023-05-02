@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JobOfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,14 @@ class JobOffer
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\ManyToMany(targetEntity: Applicant::class, mappedBy: 'job_offer')]
+    private Collection $applicants;
+
+    public function __construct()
+    {
+        $this->applicants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +130,33 @@ class JobOffer
     public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Applicant>
+     */
+    public function getApplicants(): Collection
+    {
+        return $this->applicants;
+    }
+
+    public function addApplicant(Applicant $applicant): self
+    {
+        if (!$this->applicants->contains($applicant)) {
+            $this->applicants->add($applicant);
+            $applicant->addJobOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplicant(Applicant $applicant): self
+    {
+        if ($this->applicants->removeElement($applicant)) {
+            $applicant->removeJobOffer($this);
+        }
 
         return $this;
     }
