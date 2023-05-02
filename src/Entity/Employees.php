@@ -68,6 +68,10 @@ class Employees
     #[ORM\JoinColumn(nullable: false)]
     private ?Report $report = null;
 
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Salary $salary = null;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -323,6 +327,18 @@ class Employees
     public function setReport(?Report $report): self
     {
         $this->report = $report;
+
+        return $this;
+    }
+
+    public function getSalary(): ?Salary
+    {
+        return $this->salary;
+    }
+
+    public function setSalary(?Salary $salary): self
+    {
+        $this->salary = $salary;
 
         return $this;
     }
