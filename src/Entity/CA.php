@@ -31,6 +31,10 @@ class CA
     #[ORM\Column]
     private ?float $projected_turnover = null;
 
+    #[ORM\OneToOne(inversedBy: 'ca', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Report $report = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +108,18 @@ class CA
     public function setProjectedTurnover(float $projected_turnover): self
     {
         $this->projected_turnover = $projected_turnover;
+
+        return $this;
+    }
+
+    public function getReport(): ?Report
+    {
+        return $this->report;
+    }
+
+    public function setReport(Report $report): self
+    {
+        $this->report = $report;
 
         return $this;
     }

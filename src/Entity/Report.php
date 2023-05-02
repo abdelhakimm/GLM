@@ -34,6 +34,9 @@ class Report
     #[ORM\OneToMany(mappedBy: 'report', targetEntity: BudgetCompany::class)]
     private Collection $budgetCompanies;
 
+    #[ORM\OneToOne(mappedBy: 'report', cascade: ['persist', 'remove'])]
+    private ?CA $ca = null;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
@@ -149,6 +152,23 @@ class Report
                 $budgetCompany->setReport(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCa(): ?CA
+    {
+        return $this->ca;
+    }
+
+    public function setCa(CA $ca): self
+    {
+        // set the owning side of the relation if necessary
+        if ($ca->getReport() !== $this) {
+            $ca->setReport($this);
+        }
+
+        $this->ca = $ca;
 
         return $this;
     }
