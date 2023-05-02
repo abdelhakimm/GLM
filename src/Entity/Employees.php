@@ -72,6 +72,10 @@ class Employees
     #[ORM\JoinColumn(nullable: false)]
     private ?Salary $salary = null;
 
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Payslip $payslip = null;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -339,6 +343,18 @@ class Employees
     public function setSalary(?Salary $salary): self
     {
         $this->salary = $salary;
+
+        return $this;
+    }
+
+    public function getPayslip(): ?Payslip
+    {
+        return $this->payslip;
+    }
+
+    public function setPayslip(?Payslip $payslip): self
+    {
+        $this->payslip = $payslip;
 
         return $this;
     }
