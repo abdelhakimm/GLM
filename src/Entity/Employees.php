@@ -64,6 +64,10 @@ class Employees
     #[ORM\ManyToMany(targetEntity: OfficeEquipment::class, inversedBy: 'employees')]
     private Collection $office_equipment;
 
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Report $report = null;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -307,6 +311,18 @@ class Employees
     public function removeOfficeEquipment(OfficeEquipment $officeEquipment): self
     {
         $this->office_equipment->removeElement($officeEquipment);
+
+        return $this;
+    }
+
+    public function getReport(): ?Report
+    {
+        return $this->report;
+    }
+
+    public function setReport(?Report $report): self
+    {
+        $this->report = $report;
 
         return $this;
     }
