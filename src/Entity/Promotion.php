@@ -20,6 +20,9 @@ class Promotion
     #[ORM\Column(type: Types::TEXT)]
     private ?string $new_job = null;
 
+    #[ORM\ManyToOne(inversedBy: 'promotion')]
+    private ?Employees $employees = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class Promotion
     public function setNewJob(string $new_job): self
     {
         $this->new_job = $new_job;
+
+        return $this;
+    }
+
+    public function getEmployees(): ?Employees
+    {
+        return $this->employees;
+    }
+
+    public function setEmployees(?Employees $employees): self
+    {
+        $this->employees = $employees;
 
         return $this;
     }

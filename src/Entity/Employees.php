@@ -85,6 +85,9 @@ class Employees
     #[ORM\ManyToMany(targetEntity: PointOfSale::class, inversedBy: 'employees')]
     private Collection $point_sale;
 
+    #[ORM\OneToMany(mappedBy: 'employees', targetEntity: Promotion::class)]
+    private Collection $promotion;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -94,6 +97,7 @@ class Employees
         $this->bill = new ArrayCollection();
         $this->product = new ArrayCollection();
         $this->point_sale = new ArrayCollection();
+        $this->promotion = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -445,6 +449,36 @@ class Employees
     public function removePointSale(PointOfSale $pointSale): self
     {
         $this->point_sale->removeElement($pointSale);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Promotion>
+     */
+    public function getPromotion(): Collection
+    {
+        return $this->promotion;
+    }
+
+    public function addPromotion(Promotion $promotion): self
+    {
+        if (!$this->promotion->contains($promotion)) {
+            $this->promotion->add($promotion);
+            $promotion->setEmployees($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): self
+    {
+        if ($this->promotion->removeElement($promotion)) {
+            // set the owning side to null (unless already changed)
+            if ($promotion->getEmployees() === $this) {
+                $promotion->setEmployees(null);
+            }
+        }
 
         return $this;
     }
