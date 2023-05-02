@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EmployeesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -40,6 +42,14 @@ class Employees
 
     #[ORM\Column(length: 255)]
     private ?string $profile_picture = null;
+
+    #[ORM\OneToMany(mappedBy: 'employees', targetEntity: Address::class)]
+    private Collection $address;
+
+    public function __construct()
+    {
+        $this->address = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -150,6 +160,36 @@ class Employees
     public function setProfilePicture(string $profile_picture): self
     {
         $this->profile_picture = $profile_picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Address>
+     */
+    public function getAddress(): Collection
+    {
+        return $this->address;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->address->contains($address)) {
+            $this->address->add($address);
+            $address->setEmployees($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        if ($this->address->removeElement($address)) {
+            // set the owning side to null (unless already changed)
+            if ($address->getEmployees() === $this) {
+                $address->setEmployees(null);
+            }
+        }
 
         return $this;
     }
