@@ -26,6 +26,9 @@ class Contract
     #[ORM\Column]
     private ?int $hour_contract = null;
 
+    #[ORM\OneToOne(mappedBy: 'contract', cascade: ['persist', 'remove'])]
+    private ?Employees $employees = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,23 @@ class Contract
     public function setHourContract(int $hour_contract): self
     {
         $this->hour_contract = $hour_contract;
+
+        return $this;
+    }
+
+    public function getEmployees(): ?Employees
+    {
+        return $this->employees;
+    }
+
+    public function setEmployees(Employees $employees): self
+    {
+        // set the owning side of the relation if necessary
+        if ($employees->getContract() !== $this) {
+            $employees->setContract($this);
+        }
+
+        $this->employees = $employees;
 
         return $this;
     }

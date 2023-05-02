@@ -54,6 +54,10 @@ class Employees
     #[ORM\ManyToMany(targetEntity: Meetings::class, inversedBy: 'employees')]
     private Collection $meeting;
 
+    #[ORM\OneToOne(inversedBy: 'employees', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Contract $contract = null;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -235,6 +239,18 @@ class Employees
     public function removeMeeting(Meetings $meeting): self
     {
         $this->meeting->removeElement($meeting);
+
+        return $this;
+    }
+
+    public function getContract(): ?Contract
+    {
+        return $this->contract;
+    }
+
+    public function setContract(Contract $contract): self
+    {
+        $this->contract = $contract;
 
         return $this;
     }
