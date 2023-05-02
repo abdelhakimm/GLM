@@ -76,12 +76,16 @@ class Employees
     #[ORM\JoinColumn(nullable: false)]
     private ?Payslip $payslip = null;
 
+    #[ORM\OneToMany(mappedBy: 'employees', targetEntity: Bill::class)]
+    private Collection $bill;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
         $this->meeting = new ArrayCollection();
         $this->holidays = new ArrayCollection();
         $this->office_equipment = new ArrayCollection();
+        $this->bill = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -355,6 +359,36 @@ class Employees
     public function setPayslip(?Payslip $payslip): self
     {
         $this->payslip = $payslip;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bill>
+     */
+    public function getBill(): Collection
+    {
+        return $this->bill;
+    }
+
+    public function addBill(Bill $bill): self
+    {
+        if (!$this->bill->contains($bill)) {
+            $this->bill->add($bill);
+            $bill->setEmployees($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bill $bill): self
+    {
+        if ($this->bill->removeElement($bill)) {
+            // set the owning side to null (unless already changed)
+            if ($bill->getEmployees() === $this) {
+                $bill->setEmployees(null);
+            }
+        }
 
         return $this;
     }
