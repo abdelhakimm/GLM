@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ApplicantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,14 @@ class Applicant
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $application_date = null;
+
+    #[ORM\ManyToMany(targetEntity: JobOffer::class, inversedBy: 'applicants')]
+    private Collection $job_offer;
+
+    public function __construct()
+    {
+        $this->job_offer = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +100,30 @@ class Applicant
     public function setApplicationDate(\DateTimeInterface $application_date): self
     {
         $this->application_date = $application_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobOffer>
+     */
+    public function getJobOffer(): Collection
+    {
+        return $this->job_offer;
+    }
+
+    public function addJobOffer(JobOffer $jobOffer): self
+    {
+        if (!$this->job_offer->contains($jobOffer)) {
+            $this->job_offer->add($jobOffer);
+        }
+
+        return $this;
+    }
+
+    public function removeJobOffer(JobOffer $jobOffer): self
+    {
+        $this->job_offer->removeElement($jobOffer);
 
         return $this;
     }
