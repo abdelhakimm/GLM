@@ -19,6 +19,10 @@ class Bill
     #[ORM\Column]
     private ?float $sum = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bill')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Employees $employees = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class Bill
     public function setSum(float $sum): self
     {
         $this->sum = $sum;
+
+        return $this;
+    }
+
+    public function getEmployees(): ?Employees
+    {
+        return $this->employees;
+    }
+
+    public function setEmployees(?Employees $employees): self
+    {
+        $this->employees = $employees;
 
         return $this;
     }
