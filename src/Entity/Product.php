@@ -34,6 +34,10 @@ class Product
     #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'product')]
     private Collection $employees;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Bill $bill = null;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
@@ -127,6 +131,18 @@ class Product
         if ($this->employees->removeElement($employee)) {
             $employee->removeProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getBill(): ?Bill
+    {
+        return $this->bill;
+    }
+
+    public function setBill(?Bill $bill): self
+    {
+        $this->bill = $bill;
 
         return $this;
     }

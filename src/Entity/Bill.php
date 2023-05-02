@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BillRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BillRepository::class)]
@@ -22,6 +24,14 @@ class Bill
     #[ORM\ManyToOne(inversedBy: 'bill')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Employees $employees = null;
+
+    #[ORM\OneToMany(mappedBy: 'bill', targetEntity: Product::class)]
+    private Collection $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +70,36 @@ class Bill
     public function setEmployees(?Employees $employees): self
     {
         $this->employees = $employees;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setBill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getBill() === $this) {
+                $product->setBill(null);
+            }
+        }
 
         return $this;
     }
