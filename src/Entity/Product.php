@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,14 @@ class Product
 
     #[ORM\Column(length: 50)]
     private ?string $category = null;
+
+    #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'product')]
+    private Collection $employees;
+
+    public function __construct()
+    {
+        $this->employees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +100,33 @@ class Product
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employees>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employees $employee): self
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employees $employee): self
+    {
+        if ($this->employees->removeElement($employee)) {
+            $employee->removeProduct($this);
+        }
 
         return $this;
     }
