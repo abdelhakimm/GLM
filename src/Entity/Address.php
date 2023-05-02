@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AddressRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
@@ -27,6 +29,14 @@ class Address
 
     #[ORM\OneToOne(mappedBy: 'address', cascade: ['persist', 'remove'])]
     private ?Applicant $applicant = null;
+
+    #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, mappedBy: 'address')]
+    private Collection $purchaseRequests;
+
+    public function __construct()
+    {
+        $this->purchaseRequests = new ArrayCollection();
+    }
     
     public function getId(): ?int
     {
@@ -94,6 +104,33 @@ class Address
         }
 
         $this->applicant = $applicant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PurchaseRequest>
+     */
+    public function getPurchaseRequests(): Collection
+    {
+        return $this->purchaseRequests;
+    }
+
+    public function addPurchaseRequest(PurchaseRequest $purchaseRequest): self
+    {
+        if (!$this->purchaseRequests->contains($purchaseRequest)) {
+            $this->purchaseRequests->add($purchaseRequest);
+            $purchaseRequest->addAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removePurchaseRequest(PurchaseRequest $purchaseRequest): self
+    {
+        if ($this->purchaseRequests->removeElement($purchaseRequest)) {
+            $purchaseRequest->removeAddress($this);
+        }
 
         return $this;
     }
