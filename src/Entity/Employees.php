@@ -42,9 +42,10 @@ class Employees
 
     #[ORM\Column(length: 255)]
     private ?string $profile_picture = null;
-
-    #[ORM\OneToMany(mappedBy: 'employees', targetEntity: Address::class)]
-    private Collection $address;
+    
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address = null;
 
     public function __construct()
     {
