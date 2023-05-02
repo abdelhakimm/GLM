@@ -22,10 +22,9 @@ class Address
     #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[ORM\ManyToOne(inversedBy: 'address')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Employees $employees = null;
-
+    #[ORM\OneToMany(mappedBy: 'address', targetEntity: Employees::class)]
+    private Collection $employees;
+    
     public function getId(): ?int
     {
         return $this->id;
