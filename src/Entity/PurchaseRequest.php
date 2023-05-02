@@ -31,9 +31,13 @@ class PurchaseRequest
     #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'purchase_request')]
     private Collection $employees;
 
+    #[ORM\ManyToMany(targetEntity: Address::class, inversedBy: 'purchaseRequests')]
+    private Collection $address;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
+        $this->address = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +116,30 @@ class PurchaseRequest
         if ($this->employees->removeElement($employee)) {
             $employee->removePurchaseRequest($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Address>
+     */
+    public function getAddress(): Collection
+    {
+        return $this->address;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->address->contains($address)) {
+            $this->address->add($address);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        $this->address->removeElement($address);
 
         return $this;
     }
