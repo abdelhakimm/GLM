@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OfficeEquipmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,14 @@ class OfficeEquipment
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
+
+    #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'office_equipment')]
+    private Collection $employees;
+
+    public function __construct()
+    {
+        $this->employees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +145,33 @@ class OfficeEquipment
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employees>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employees $employee): self
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->addOfficeEquipment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employees $employee): self
+    {
+        if ($this->employees->removeElement($employee)) {
+            $employee->removeOfficeEquipment($this);
+        }
 
         return $this;
     }

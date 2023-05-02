@@ -61,11 +61,15 @@ class Employees
     #[ORM\ManyToMany(targetEntity: Holidays::class, inversedBy: 'employees')]
     private Collection $holidays;
 
+    #[ORM\ManyToMany(targetEntity: OfficeEquipment::class, inversedBy: 'employees')]
+    private Collection $office_equipment;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
         $this->meeting = new ArrayCollection();
         $this->holidays = new ArrayCollection();
+        $this->office_equipment = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -279,6 +283,30 @@ class Employees
     public function removeHoliday(Holidays $holiday): self
     {
         $this->holidays->removeElement($holiday);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OfficeEquipment>
+     */
+    public function getOfficeEquipment(): Collection
+    {
+        return $this->office_equipment;
+    }
+
+    public function addOfficeEquipment(OfficeEquipment $officeEquipment): self
+    {
+        if (!$this->office_equipment->contains($officeEquipment)) {
+            $this->office_equipment->add($officeEquipment);
+        }
+
+        return $this;
+    }
+
+    public function removeOfficeEquipment(OfficeEquipment $officeEquipment): self
+    {
+        $this->office_equipment->removeElement($officeEquipment);
 
         return $this;
     }
