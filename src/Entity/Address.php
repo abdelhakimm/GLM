@@ -33,9 +33,13 @@ class Address
     #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, mappedBy: 'address')]
     private Collection $purchaseRequests;
 
+    #[ORM\ManyToMany(targetEntity: PointOfSale::class, mappedBy: 'address')]
+    private Collection $pointOfSales;
+
     public function __construct()
     {
         $this->purchaseRequests = new ArrayCollection();
+        $this->pointOfSales = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -130,6 +134,33 @@ class Address
     {
         if ($this->purchaseRequests->removeElement($purchaseRequest)) {
             $purchaseRequest->removeAddress($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PointOfSale>
+     */
+    public function getPointOfSales(): Collection
+    {
+        return $this->pointOfSales;
+    }
+
+    public function addPointOfSale(PointOfSale $pointOfSale): self
+    {
+        if (!$this->pointOfSales->contains($pointOfSale)) {
+            $this->pointOfSales->add($pointOfSale);
+            $pointOfSale->addAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removePointOfSale(PointOfSale $pointOfSale): self
+    {
+        if ($this->pointOfSales->removeElement($pointOfSale)) {
+            $pointOfSale->removeAddress($this);
         }
 
         return $this;
