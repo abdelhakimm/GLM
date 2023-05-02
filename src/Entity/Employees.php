@@ -47,6 +47,10 @@ class Employees
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
 
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Mutual $mutual = null;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -191,6 +195,18 @@ class Employees
                 $address->setEmployees(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMutual(): ?Mutual
+    {
+        return $this->mutual;
+    }
+
+    public function setMutual(?Mutual $mutual): self
+    {
+        $this->mutual = $mutual;
 
         return $this;
     }
