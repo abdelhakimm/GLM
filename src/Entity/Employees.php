@@ -82,6 +82,9 @@ class Employees
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'employees')]
     private Collection $product;
 
+    #[ORM\ManyToMany(targetEntity: PointOfSale::class, inversedBy: 'employees')]
+    private Collection $point_sale;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -90,6 +93,7 @@ class Employees
         $this->office_equipment = new ArrayCollection();
         $this->bill = new ArrayCollection();
         $this->product = new ArrayCollection();
+        $this->point_sale = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -417,6 +421,30 @@ class Employees
     public function removeProduct(Product $product): self
     {
         $this->product->removeElement($product);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PointOfSale>
+     */
+    public function getPointSale(): Collection
+    {
+        return $this->point_sale;
+    }
+
+    public function addPointSale(PointOfSale $pointSale): self
+    {
+        if (!$this->point_sale->contains($pointSale)) {
+            $this->point_sale->add($pointSale);
+        }
+
+        return $this;
+    }
+
+    public function removePointSale(PointOfSale $pointSale): self
+    {
+        $this->point_sale->removeElement($pointSale);
 
         return $this;
     }
