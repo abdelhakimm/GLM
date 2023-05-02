@@ -91,6 +91,9 @@ class Employees
     #[ORM\ManyToMany(targetEntity: Memo::class, inversedBy: 'employees')]
     private Collection $memo;
 
+    #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, inversedBy: 'employees')]
+    private Collection $purchase_request;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
@@ -102,6 +105,7 @@ class Employees
         $this->point_sale = new ArrayCollection();
         $this->promotion = new ArrayCollection();
         $this->memo = new ArrayCollection();
+        $this->purchase_request = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -507,6 +511,30 @@ class Employees
     public function removeMemo(Memo $memo): self
     {
         $this->memo->removeElement($memo);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PurchaseRequest>
+     */
+    public function getPurchaseRequest(): Collection
+    {
+        return $this->purchase_request;
+    }
+
+    public function addPurchaseRequest(PurchaseRequest $purchaseRequest): self
+    {
+        if (!$this->purchase_request->contains($purchaseRequest)) {
+            $this->purchase_request->add($purchaseRequest);
+        }
+
+        return $this;
+    }
+
+    public function removePurchaseRequest(PurchaseRequest $purchaseRequest): self
+    {
+        $this->purchase_request->removeElement($purchaseRequest);
 
         return $this;
     }
