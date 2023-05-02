@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MeetingsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,14 @@ class Meetings
 
     #[ORM\Column]
     private ?int $attendees = null;
+
+    #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'meeting')]
+    private Collection $employees;
+
+    public function __construct()
+    {
+        $this->employees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +100,33 @@ class Meetings
     public function setAttendees(int $attendees): self
     {
         $this->attendees = $attendees;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employees>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployees(Employees $employees): self
+    {
+        if (!$this->employees->contains($employees)) {
+            $this->employees->add($employees);
+            $employees->addMeeting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployees(Employees $employees): self
+    {
+        if ($this->employees->removeElement($employees)) {
+            $employees->removeMeeting($this);
+        }
 
         return $this;
     }

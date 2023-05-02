@@ -51,9 +51,13 @@ class Employees
     #[ORM\JoinColumn(nullable: false)]
     private ?Mutual $mutual = null;
 
+    #[ORM\ManyToMany(targetEntity: Meetings::class, inversedBy: 'employees')]
+    private Collection $meeting;
+
     public function __construct()
     {
         $this->address = new ArrayCollection();
+        $this->meeting = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,6 +211,30 @@ class Employees
     public function setMutual(?Mutual $mutual): self
     {
         $this->mutual = $mutual;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Meetings>
+     */
+    public function getMeeting(): Collection
+    {
+        return $this->meeting;
+    }
+
+    public function addMeeting(Meetings $meeting): self
+    {
+        if (!$this->meeting->contains($meeting)) {
+            $this->meeting->add($meeting);
+        }
+
+        return $this;
+    }
+
+    public function removeMeeting(Meetings $meeting): self
+    {
+        $this->meeting->removeElement($meeting);
 
         return $this;
     }
