@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StockCompanyCommercialRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StockCompanyCommercialRepository::class)]
@@ -21,6 +23,14 @@ class StockCompanyCommercial
 
     #[ORM\Column(length: 20)]
     private ?string $reference = null;
+
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'stockCompanyCommercials')]
+    private Collection $product;
+
+    public function __construct()
+    {
+        $this->product = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +69,30 @@ class StockCompanyCommercial
     public function setReference(string $reference): self
     {
         $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProduct(): Collection
+    {
+        return $this->product;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->product->contains($product)) {
+            $this->product->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        $this->product->removeElement($product);
 
         return $this;
     }

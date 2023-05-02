@@ -38,9 +38,13 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Bill $bill = null;
 
+    #[ORM\ManyToMany(targetEntity: StockCompanyCommercial::class, mappedBy: 'product')]
+    private Collection $stockCompanyCommercials;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
+        $this->stockCompanyCommercials = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +147,33 @@ class Product
     public function setBill(?Bill $bill): self
     {
         $this->bill = $bill;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StockCompanyCommercial>
+     */
+    public function getStockCompanyCommercials(): Collection
+    {
+        return $this->stockCompanyCommercials;
+    }
+
+    public function addStockCompanyCommercial(StockCompanyCommercial $stockCompanyCommercial): self
+    {
+        if (!$this->stockCompanyCommercials->contains($stockCompanyCommercial)) {
+            $this->stockCompanyCommercials->add($stockCompanyCommercial);
+            $stockCompanyCommercial->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockCompanyCommercial(StockCompanyCommercial $stockCompanyCommercial): self
+    {
+        if ($this->stockCompanyCommercials->removeElement($stockCompanyCommercial)) {
+            $stockCompanyCommercial->removeProduct($this);
+        }
 
         return $this;
     }
