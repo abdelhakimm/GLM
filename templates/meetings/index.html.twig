@@ -1,20 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MeetingsController!{% endblock %}
+
+
+{% block title %}Les reunions{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/GLM/src/Controller/MeetingsController.php'|file_link(0) }}">src/Controller/MeetingsController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/GLM/templates/meetings/index.html.twig'|file_link(0) }}">templates/meetings/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="container-md mt-5">
+        {% for message in app.flashes('success_meetings_create') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('success_meetings_edit') %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('success_meetings_delete') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-8">
+                <h2>Les réunions</h2>
+            </div>
+            <div class="col-md-8">
+                <a class="btn btn-info" href="{{ path('meeting_create') }}">Créer une réunion</a>
+            </div>
+        </div>
+        <div class="table-responsive mt-5">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">titre</th>
+                    <th class="text-center">option</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for meeting in meetings %}
+                    <tr>
+                        <td class="text-center">{{ meeting.createdAt|date('d-m-Y') }}</td>
+                        <td class="text-center"><a class="text-dark" target="_blank" rel="noopener noreferrer" href="#">{{ meeting.title|capitalize }}</a></td>
+                        <td class="center">
+                            <div class="row d-flex justify-content-center">
+                                <div class="mx-3">
+                                    <a class="btn btn-warning" href="{{ path('meeting_edit', {'title': meeting.title}) }}"><i class="fas fa-edit mr-1"></i>Éditer</a>
+                                    <a class="btn btn-danger" href="{{ path('meeting_delete', {'title': meeting.title}) }}"><i class="fas fa-trash mr-1"></i>Supprimer</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

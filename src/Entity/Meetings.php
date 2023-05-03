@@ -7,7 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity('title', 'Une autre reunion porte déjà ce titre')]
 #[ORM\Entity(repositoryClass: MeetingsRepository::class)]
 class Meetings
 {
@@ -33,6 +35,9 @@ class Meetings
 
     #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'meeting')]
     private Collection $employees;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
@@ -127,6 +132,18 @@ class Meetings
         if ($this->employees->removeElement($employees)) {
             $employees->removeMeeting($this);
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
