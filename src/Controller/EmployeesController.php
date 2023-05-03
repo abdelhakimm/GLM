@@ -76,4 +76,10 @@ class EmployeesController extends AbstractController
         ]);
         
     }
+
+    #[Route('/employees/modifier/{id}', name: 'edit_employee')]
+    public function edit(Employees $employee, Request $request, $id, string $employeeProfilePictureDir)
+    {
+      
+    }
 }
