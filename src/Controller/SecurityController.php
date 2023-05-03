@@ -18,7 +18,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
+        
         if ($this->getUser()) {
             return $this->redirectToRoute('check_employee', array('email' => $lastUsername));
         }
