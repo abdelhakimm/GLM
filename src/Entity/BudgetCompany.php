@@ -26,6 +26,9 @@ class BudgetCompany
     #[ORM\JoinColumn(nullable: false)]
     private ?Report $report = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class BudgetCompany
     public function setReport(?Report $report): self
     {
         $this->report = $report;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
