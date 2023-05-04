@@ -24,22 +24,10 @@ class EmployeesController extends AbstractController
     public function index(): Response
     {
         
-        $user = $this->entityManager->getRepository(User::class)->findAll();
+        $user = $this->entityManager->getRepository(User::class)->getAllUsers();
 
         return $this->render('employees/index.html.twig', [
             'users' => $user,
-            'current_menu' => 'employee'
-        ]);
-    }
-
-    #[Route('/employees/details/{id}', name: 'details_employee')]
-    public function détails($id): Response
-    {
-        
-        // $employee = $this->entityManager->getRepository(Employees::class)->findOneById($id);
-
-
-        return $this->render('employees/details.html.twig', [
             'current_menu' => 'employee'
         ]);
     }
