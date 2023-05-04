@@ -30,10 +30,11 @@ class EmployeesController extends AbstractController
         ]);
     }
 
-    #[Route('/employees/check/{email}', name: 'check_employee')]
-    public function check(EntityManagerInterface $entityManager, $email): Response
+    #[Route('/employees/check/', name: 'check_employee')]
+    public function check(): Response
     {
-        $user = $entityManager->getRepository(User::class)->findOneByEmail($email);
+          /** @var User */
+          $user = $this->getUser();
         if ($user->getEmployee() == null) {
             return $this->redirectToRoute('new_employee');
         } else {
