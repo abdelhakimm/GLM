@@ -22,7 +22,7 @@ class SalaryController extends AbstractController
     {
         $salary = $this->entityManager->getRepository(Salary::class)->findAll();
         return $this->render('salary/index.html.twig', [
-            'salary'=>$salary,
+            'salarys'=>$salary,
             'current_menu' => 'Salary'
         ]);
     }
@@ -35,9 +35,13 @@ class SalaryController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $this->entityManager->persist($salary);
             $this->entityManager->flush();
-            $this->addFlash('succes_holidays_create', 'vos vacances ont bien été prise en compte');
+            $this->addFlash('succes_salary_create', 'salaire a bien été pris en compte');
             return $this->redirectToRoute('salary');
         }
+        return $this->render('salary/new.html.twig', [
+            'salaryForm'=>$form->createView(),
+            'current_menu'=>'salary'
+        ]);
     }
 
     #[Route('/salary/modifier/{id}', name:'salary_edit')]
@@ -48,7 +52,7 @@ class SalaryController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $this->entityManager->flush();
-            $this->addFlash('succes_holidays_edit', 'les vacances ont était modifié');
+            $this->addFlash('succes_salary_edit', 'le salaire a était modifié');
             return $this->redirectToRoute('salary');
         }
         return $this->render('salary/edit.html.twig', [
@@ -56,6 +60,14 @@ class SalaryController extends AbstractController
             'salaryForm'=>$form->createView(),
             'current_menu'=>'salary'
         ]);
+    }
+    #[Route('/salary/delete', name:'salary_delete')]
+    public function delete(Salary $salary)
+    {
+        $this->entityManager->remove($salary);
+        $this->entityManager->flush();
+        $this->addFlash('success_slary_delete', 'votre salaire a bien été supprimé');
+        return $this->redirectToRoute('salary');
     }
     
 }
