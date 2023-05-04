@@ -16,17 +16,8 @@ class Employees
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $lastname = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $firstname = null;
-
     #[ORM\Column]
     private ?int $phone_number = null;
-
-    #[ORM\Column(length: 100)]
-    private ?string $email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthday = null;
@@ -35,27 +26,24 @@ class Employees
     private ?\DateTimeInterface $hiring_date = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $roles = null;
-
-    #[ORM\Column(length: 50)]
     private ?string $job = null;
 
     #[ORM\Column(length: 255)]
     private ?string $profile_picture = null;
     
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Address $address = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable : true)]
     private ?Mutual $mutual = null;
 
     #[ORM\ManyToMany(targetEntity: Meetings::class, inversedBy: 'employees')]
     private Collection $meeting;
 
     #[ORM\OneToOne(inversedBy: 'employees', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable : true)]
     private ?Contract $contract = null;
 
     #[ORM\ManyToMany(targetEntity: Holidays::class, inversedBy: 'employees')]
@@ -65,15 +53,15 @@ class Employees
     private Collection $office_equipment;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable : true)]
     private ?Report $report = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable : true)]
     private ?Salary $salary = null;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable : true)]
     private ?Payslip $payslip = null;
 
     #[ORM\OneToMany(mappedBy: 'employees', targetEntity: Bill::class)]
@@ -94,9 +82,11 @@ class Employees
     #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, inversedBy: 'employees')]
     private Collection $purchase_request;
 
+    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
-        $this->address = new ArrayCollection();
         $this->meeting = new ArrayCollection();
         $this->holidays = new ArrayCollection();
         $this->office_equipment = new ArrayCollection();
@@ -113,30 +103,6 @@ class Employees
         return $this->id;
     }
 
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getFirstname(): ?string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(string $firstname): self
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
     public function getPhoneNumber(): ?int
     {
         return $this->phone_number;
@@ -145,18 +111,6 @@ class Employees
     public function setPhoneNumber(int $phone_number): self
     {
         $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
 
         return $this;
     }
@@ -185,18 +139,6 @@ class Employees
         return $this;
     }
 
-    public function getRoles(): ?string
-    {
-        return $this->roles;
-    }
-
-    public function setRoles(string $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     public function getJob(): ?string
     {
         return $this->job;
@@ -221,35 +163,39 @@ class Employees
         return $this;
     }
 
-    /**
-     * @return Collection<int, Address>
-     */
-    public function getAddress(): Collection
+    
+    public function getAddress(): ?Address
     {
         return $this->address;
     }
 
-    public function addAddress(Address $address): self
-    {
-        if (!$this->address->contains($address)) {
-            $this->address->add($address);
-            $address->setEmployees($this);
-        }
+    // public function addAddress(Address $address): self
+    // {
+    //     if (!$this->address->contains($address)) {
+    //         $this->address->add($address);
+    //         $address->setEmployees($this);
+    //     }
 
-        return $this;
+    //     return $this;
+    // }
+
+    public function setAddress(Address $address): self{
+
+        $this->address = $address;
+        return  $this;
     }
 
-    public function removeAddress(Address $address): self
-    {
-        if ($this->address->removeElement($address)) {
-            // set the owning side to null (unless already changed)
-            if ($address->getEmployees() === $this) {
-                $address->setEmployees(null);
-            }
-        }
+    // public function removeAddress(Address $address): self
+    // {
+    //     if ($this->address->removeElement($address)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($address->getEmployees() === $this) {
+    //             $address->setEmployees(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getMutual(): ?Mutual
     {
@@ -535,6 +481,28 @@ class Employees
     public function removePurchaseRequest(PurchaseRequest $purchaseRequest): self
     {
         $this->purchase_request->removeElement($purchaseRequest);
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setEmployee(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getEmployee() !== $this) {
+            $user->setEmployee($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

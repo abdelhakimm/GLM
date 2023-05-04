@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfileController!{% endblock %}
+
+{% block body %}
+<div class="container-md mt-5">
+    <div class="jumbotron bg-primary text-light p-5 text-center">
+        <h2>Bienvenue sur votre profil {{ user.firstname }}</h2>
+        <p>C'est ici que vous pouvez consulter vos informations</p>
+    </div>
+    <div class="jumbotron bg-primary text-light p-5">
+        <p>Votre photo de profil : </p>
+        <p><img class="w-25 img-fluid rounded-5" alt="PhotoDeProfil" src="{{ asset('uploads/employees/ProfilePicture/'~user.employee.profilePicture) }}" /></p>
+        <p>Votre nom : {{ user.lastname }} </p>
+        <p>Votre prénom : {{ user.firstname }} </p>
+        <p>Votre email : {{ user.email }} </p>
+        <p>Votre date de naissance : {{ user.employee.birthday|date('d/m/y') }}</p>
+        <p>Votre date d'embauche : {{ user.employee.hiringDate|date('d/m/y')}} </p>
+        <p>Votre secteur : {{ user.employee.job }} </p>
+    </div>
+    
+</div>
+{% endblock %}
