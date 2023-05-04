@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HolidaysController!{% endblock %}
+{# {% block title %}Hello HolidaysController!{% endblock %}
 
 {% block body %}
 
@@ -16,15 +16,15 @@
       <th scope="col">Holidays</th>
       <th scope="col">date de début</th>
       <th scope="col">date de fin</th>
-      {# <th scope="col">accepter/refusé</th> #}
+      <th scope="col">accepter/refusé</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">1</th>
+      <th scope="row">##</th>
       <td><p>En vacances a partir du : {{ holiday.dateStart|date('d-m-Y')}}</p></td>
       <td><p>En vacances jusqu'au  : {{ holiday.dateEnd|date('d-m-Y')}}</p></td>
-      {# <td><p> {% if is_validated %}YES{% else %}NO{% endif %} </p></td> #}
+      <td><p> {% if holiday.isValidated %}vacances accepté{% else %}refusé{% endif %} </p></td>
     </tr>
   </tbody>
 </table>
@@ -46,4 +46,67 @@
                     </article>
 {% endfor %}
 </div>
+{% endblock %} #}
+
+{# {% extends 'base.html.twig' %} #}
+{% block title %}Les demande d'achat{% endblock %}
+
+{% block body %}
+    <div class="container-md mt-5">
+        {% for message in app.flashes('succes_holidays_create') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('succes_holidays_edit') %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('succes_holidays_delete') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-8">
+                <h2>Les vacances</h2>
+            </div>
+            <div class="col-md-8">
+                <a class="btn btn-info" href="{{ path('holidays_create') }}">création de vacances</a>
+            </div>
+        </div>
+        <div class="table-responsive mt-5">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+      <th scope="col">holidays</th>
+      <th scope="col">date de début</th>
+      <th scope="col">date de fin</th>
+      <th scope="col">accepter/refusé</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for holiday in holidays %}
+                    <tr>
+                          <th scope="row">##</th>
+      <td><p>En vacances a partir du : {{ holiday.dateStart|date('d-m-Y')}}</p></td>
+      <td><p>En vacances jusqu'au  : {{ holiday.dateEnd|date('d-m-Y')}}</p></td>
+      <td><p> {% if holiday.isValidated %}vacances accepté{% else %}refusé{% endif %} </p></td>
+                        <td class="center">
+                            <div class="row d-flex justify-content-center">
+                                <div class="mx-3">
+                                        <a class="btn btn-warning" href="{{ path('holidays_edit', {'id' : holiday.id}) }}"><i class="fas fa-edit mr-1"></i>Éditer</a>   
+                                        <a class="btn btn-danger" onclick="confirm('Supprimer les vacances ?')" href="{{ path('holidays_delete', {'id' : holiday.id}) }}"><i class="fas fa-trash mr-1"></i>Supprimer</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

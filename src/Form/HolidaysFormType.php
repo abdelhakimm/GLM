@@ -17,14 +17,14 @@ class HolidaysFormType extends AbstractType
             ->add('date_start', DateType::class, [
                 'label'=>"date de début",
                 'attr'=>[
-                    'class'=>'date-picker',
+                    'class'=>'form-control-my-2',
                     'format'=>'dd/mm/yyyy'
                 ]
             ])
             ->add('date_end', DateType::class, [
                 'label'=>'date de fin',
                 'attr'=>[
-                    'class'=>'date-picker',
+                    'class'=>'form-control-my-2',
                     'format'=>'dd/mm/yyyy'
                 ]
             ])
