@@ -44,6 +44,9 @@ class PurchaseRequestController extends AbstractController
         $form = $this->createForm(PurchaseRequestType::class, $purchase_request);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $dateTimeZone = new \DateTimeZone('Europe/Paris');
+            $date = new \DateTimeImmutable('now', $dateTimeZone);
+            $purchase_request->setCreatedAt($date);
             $entityManager->persist($purchase_request);
             $entityManager->flush();
 
@@ -51,7 +54,7 @@ class PurchaseRequestController extends AbstractController
                 'succes_purchase_request_create',
                 'la demande d\'achat a bien ete prise en compte'
             );
-            return $this->redirectToRoute('purchase_request_create');
+            return $this->redirectToRoute('purchase_request');
         }
         return $this->render('purchase_request/new.html.twig', [
             'PurchaseRequestForm' => $form->createView(),

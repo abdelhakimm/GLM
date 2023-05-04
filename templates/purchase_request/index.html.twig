@@ -26,7 +26,7 @@
                 <h2>Les réunions</h2>
             </div>
             <div class="col-md-8">
-                <a class="btn btn-info" href="{{ path('meeting_create') }}">Créer une demande d'achat</a>
+                <a class="btn btn-info" href="{{ path('purchase_request_create') }}">Créer une demande d'achat</a>
             </div>
         </div>
         <div class="table-responsive mt-5">
@@ -41,7 +41,7 @@
                 <tbody>
                 {% for PurchaseRequest in PurchaseRequests %}
                     <tr>
-                        <td class="text-center"></td>
+                        <td class="text-center">{{ PurchaseRequest.createdAt|date('d-m-Y') }}</td>
                         <td class="text-center"><a class="text-dark" target="_blank" rel="noopener noreferrer" href="#">{{ PurchaseRequest.name|capitalize }}</a></td>
                         <td class="center">
                             <div class="row d-flex justify-content-center">
