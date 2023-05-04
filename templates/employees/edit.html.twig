@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification des informations d'employé{% endblock %}
+
+{% block body %}
+    <div class="container-md mt-5">
+        <h2>Modification des informations de l'employé</h2>
+        <section>
+            {{ form(employeeForm) }}
+        </section>
+    </div>
+{% endblock %}

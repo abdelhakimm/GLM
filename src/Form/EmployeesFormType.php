@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Employees;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -48,7 +49,14 @@ class EmployeesFormType extends AbstractType
                     'class' => 'text-info'
                 ]
             ])
-            ->add('job', TextType::class, [
+            ->add('job', ChoiceType::class, [
+                'choices' => [
+                    'Veuillez selectionner votre service' => [
+                        'Comptabilité' => 'Comptabilité',
+                        'Logistique' => 'Logistique',
+                        'Ressources Humaines' => 'Ressources Humaines'
+                    ]
+                ],
                 'label' => 'Service',
                 'attr' => [
                     'placeholder' => 'saisir votre service',
