@@ -83,7 +83,7 @@ class EmployeesController extends AbstractController
     #[Route('/employees/modifier/{id}', name: 'edit_employee')]
     public function edit(Employees $employee, Request $request, $id, string $employeeProfilePictureDir)
     {
-        $employee = $this->entityManager->getRepository(Employees::class)->findOneBySlug($id);
+        $employee = $this->entityManager->getRepository(Employees::class)->findOneById($id);
 
         $form = $this->createForm(EmployeesFormType::class, $employee);
         $form->handleRequest($request);
