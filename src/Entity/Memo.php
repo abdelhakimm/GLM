@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\MemoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MemoRepository::class)]
@@ -15,72 +13,52 @@ class Memo
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
 
     #[ORM\Column]
-    private ?float $sum = null;
+    private ?int $commercial_costs = null;
 
-    #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'memo')]
-    private Collection $employees;
-
-    public function __construct()
-    {
-        $this->employees = new ArrayCollection();
-    }
+    #[ORM\Column]
+    private ?int $employees_costs = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getType(): ?string
     {
-        return $this->createdAt;
+        return $this->type;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setType(string $type): self
     {
-        $this->createdAt = $createdAt;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getSum(): ?float
+    public function getCommercialCosts(): ?int
     {
-        return $this->sum;
+        return $this->commercial_costs;
     }
 
-    public function setSum(float $sum): self
+    public function setCommercialCosts(int $commercial_costs): self
     {
-        $this->sum = $sum;
+        $this->commercial_costs = $commercial_costs;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Employees>
-     */
-    public function getEmployees(): Collection
+    public function getEmployeesCosts(): ?int
     {
-        return $this->employees;
+        return $this->employees_costs;
     }
 
-    public function addEmployee(Employees $employee): self
+    public function setEmployeesCosts(int $employees_costs): self
     {
-        if (!$this->employees->contains($employee)) {
-            $this->employees->add($employee);
-            $employee->addMemo($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEmployee(Employees $employee): self
-    {
-        if ($this->employees->removeElement($employee)) {
-            $employee->removeMemo($this);
-        }
+        $this->employees_costs = $employees_costs;
 
         return $this;
     }
