@@ -82,7 +82,8 @@ class Employees
     #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, inversedBy: 'employees')]
     private Collection $purchase_request;
 
-    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: "User",mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    
     private ?User $user = null;
 
     public function __construct()

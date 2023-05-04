@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-
 class EmployeesController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
@@ -25,8 +23,12 @@ class EmployeesController extends AbstractController
     #[Route('/employees', name: 'employees')]
     public function index(): Response
     {
+        
+        $user = $this->entityManager->getRepository(User::class)->getAllUsers();
+
         return $this->render('employees/index.html.twig', [
-            'controller_name' => 'EmployeesController',
+            'users' => $user,
+            'current_menu' => 'employee'
         ]);
     }
 
@@ -81,6 +83,39 @@ class EmployeesController extends AbstractController
     #[Route('/employees/modifier/{id}', name: 'edit_employee')]
     public function edit(Employees $employee, Request $request, $id, string $employeeProfilePictureDir)
     {
-      
+        $employee = $this->entityManager->getRepository(Employees::class)->findOneBySlug($id);
+
+        $form = $this->createForm(EmployeesFormType::class, $employee);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            if($ProfilePicture = $form['profile_picture']->getData()){
+                $ProfilePictureFilename = bin2hex(random_bytes(6)).'.'.$ProfilePicture->guessExtension();
+                try{
+                    $ProfilePicture->move($employeeProfilePictureDir, $ProfilePictureFilename);
+                }catch(FileException $e){
+                    $this->addFlash('error_ProfilePicture_employee_upload', 'Erreur lors de l\'upload de l\'image');
+                }
+                $employee->setProfilePicture($ProfilePictureFilename);
+            }
+            $this->entityManager->flush();
+            $this->addFlash('success_employee_edit', 'L\'employer a bien été modifié');
+            return $this->redirectToRoute('employees');
+        }
+
+        return $this->render('employees/edit.html.twig', [
+            'employee' => $employee,
+            'employeeForm' => $form->createView(),
+            'current_menu' => 'employee'
+        ]);
+    }
+
+    #[Route('/employees/supprimer/{id}', name: 'delete_employee')]
+    public function delete(User $user)
+    {
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+        $this->addFlash('success_employee_delete', 'Cet employee a bien été supprimé');
+        return $this->redirectToRoute('employees');
     }
 }
