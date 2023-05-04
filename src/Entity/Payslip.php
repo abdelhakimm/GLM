@@ -30,6 +30,9 @@ class Payslip
     #[ORM\OneToMany(mappedBy: 'payslip', targetEntity: Employees::class)]
     private Collection $employees;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
@@ -114,6 +117,18 @@ class Payslip
                 $employee->setPayslip(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

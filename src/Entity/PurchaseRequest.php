@@ -37,6 +37,9 @@ class PurchaseRequest
     #[ORM\ManyToMany(targetEntity: Bill::class, inversedBy: 'purchaseRequests')]
     private Collection $bill;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->employees = new ArrayCollection();
@@ -168,6 +171,18 @@ class PurchaseRequest
     public function removeBill(Bill $bill): self
     {
         $this->bill->removeElement($bill);
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
