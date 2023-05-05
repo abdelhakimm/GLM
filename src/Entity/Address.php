@@ -40,6 +40,7 @@ class Address
     {
         $this->purchaseRequests = new ArrayCollection();
         $this->pointOfSales = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -83,14 +84,32 @@ class Address
         return $this;
     }
 
-    public function getEmployees(): ?Employees
+    /**
+     * @return Collection<int, Employees>
+     */
+    public function getEmployees(): Collection
     {
         return $this->employees;
     }
 
-    public function setEmployees(?Employees $employees): self
+    public function addEmployee(Employees $employee): self
     {
-        $this->employees = $employees;
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employees $employee): self
+    {
+        if ($this->employees->removeElement($employee)) {
+            // set the owning side to null (unless already changed)
+            if ($employee->getAddress() === $this) {
+                $employee->setAddress(null);
+            }
+        }
 
         return $this;
     }
