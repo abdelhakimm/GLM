@@ -31,7 +31,7 @@ class Employees
     #[ORM\Column(length: 255)]
     private ?string $profile_picture = null;
     
-    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\ManyToOne(inversedBy: 'employees', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Address $address = null;
 
@@ -82,7 +82,8 @@ class Employees
     #[ORM\ManyToMany(targetEntity: PurchaseRequest::class, inversedBy: 'employees')]
     private Collection $purchase_request;
 
-    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: "User",mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    
     private ?User $user = null;
 
     public function __construct()

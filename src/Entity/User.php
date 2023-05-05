@@ -35,7 +35,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $firstname = null;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity:"Employees", inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name:"employee_id", referencedColumnName:"id")]
     private ?Employees $employee = null;
 
     #[ORM\Column(type: 'boolean')]

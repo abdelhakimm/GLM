@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Employees;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
@@ -30,8 +30,8 @@ class EmployeesFormType extends AbstractType
             ])
             ->add('birthday', DateType::class, [
                 'label' => 'Date de naissance',
+                'format' => 'ddMMyyyy',
                 'attr' => [
-                    'placeholder' => 'saisir votre ',
                     'class' => 'form-control my-2'
                 ],
                 'label_attr' => [
@@ -40,6 +40,7 @@ class EmployeesFormType extends AbstractType
             ])
             ->add('hiring_date', DateType::class, [
                 'label' => 'Date d\'embauche',
+                'format' => 'ddMMyyyy',
                 'attr' => [
                     'placeholder' => 'saisir votre date d\'embauche',
                     'class' => 'form-control my-2'
@@ -48,7 +49,14 @@ class EmployeesFormType extends AbstractType
                     'class' => 'text-info'
                 ]
             ])
-            ->add('job', TextType::class, [
+            ->add('job', ChoiceType::class, [
+                'choices' => [
+                    'Veuillez selectionner votre service' => [
+                        'Comptabilité' => 'Comptabilité',
+                        'Logistique' => 'Logistique',
+                        'Ressources Humaines' => 'Ressources Humaines'
+                    ]
+                ],
                 'label' => 'Service',
                 'attr' => [
                     'placeholder' => 'saisir votre service',
@@ -76,6 +84,9 @@ class EmployeesFormType extends AbstractType
                         'maxSizeMessage' => "La taille autorisée est de 2048k"
                     ])
                 ]
+            ])
+            ->add('address', AddressFormType::class, [
+                'label' => 'Adresse'
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
