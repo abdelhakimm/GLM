@@ -35,7 +35,7 @@ class Employees
     #[ORM\JoinColumn(nullable: true)]
     private ?Address $address = null;
 
-    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\ManyToOne(inversedBy: 'employees', cascade:['persist', 'remove'])]
     #[ORM\JoinColumn(nullable : true)]
     private ?Mutual $mutual = null;
 

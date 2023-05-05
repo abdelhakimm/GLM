@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Employees;
 use App\Entity\Mutual;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -36,7 +37,22 @@ class MutualFormType extends AbstractType
                 ]
             ])
 
-            ->add('employees', EntityType::class)
+            ->add('employees', EntityType::class,[
+                'label' => 'truc',
+                'label_attr' => [
+                    'class' => 'text-info'
+                ],
+                'required' => true,
+                'class' => Employees::class,
+                'multiple' => false,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'mx-3 form-check'
+                ],
+                'choice_attr' => [
+                    'class' => 'my-2'
+                ]
+            ])
 
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',

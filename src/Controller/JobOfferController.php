@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Applicant;
 use App\Entity\JobOffer;
 use App\Form\JobOfferFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,6 +34,7 @@ class JobOfferController extends AbstractController
     #[Route('/joboffer/ajout', name:'joboffer_create')]
     public function create(Request $request){
         $joboffer = new Joboffer();
+        $applicant = new Applicant();
         $form = $this->createForm(JobOfferFormType::class, $joboffer);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){

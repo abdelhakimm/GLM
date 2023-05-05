@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Applicant;
 use App\Entity\JobOffer;
 use DateTime;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -76,7 +78,22 @@ class JobOfferFormType extends AbstractType
                 ]
             ])
             
-            ->add('applicant')
+            ->add('applicant', EntityType::class,[
+                'label' => 'Choix du truc',
+                'label_attr' => [
+                    'class' => 'text-info'
+                ],
+                'required' => true,
+                'class' => Applicant::class,
+                'multiple' => false,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'mx-3 form-check'
+                ],
+                'choice_attr' => [
+                    'class' => 'my-2'
+                ]
+            ])
             
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
