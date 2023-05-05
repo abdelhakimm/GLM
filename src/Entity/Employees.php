@@ -31,7 +31,7 @@ class Employees
     #[ORM\Column(length: 255)]
     private ?string $profile_picture = null;
     
-    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[ORM\ManyToOne(inversedBy: 'employees', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Address $address = null;
 

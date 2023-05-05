@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\Employees;
 use App\Entity\User;
+use App\Form\AddressFormType;
 use App\Form\EmployeesFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,6 +52,7 @@ class EmployeesController extends AbstractController
     public function ajout(Request $request, string $employeeProfilePictureDir): Response
     {
         $employee = new Employees();
+        $address = new Address();
         $form = $this->createForm(EmployeesFormType::class, $employee);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -61,6 +64,16 @@ class EmployeesController extends AbstractController
                     $this->addFlash('error_ProfilePicture_employee_upload', 'Erreur lors de l\'upload de l\'image');
                 }
                 $employee->setProfilePicture($ProfilePictureFilename);
+                /** @var User */
+                $user = $this->getUser();
+                if($employee->getJob() == "Ressources Humaines")
+                {
+                    $user->setRoles(['ROLE_RH']);
+                }elseif ($employee->getJob() == "Logistique") {
+                    $user->setRoles(['ROLE_LOGISTIQUE']);
+                }elseif ($employee->getJob() == "Comptabilité"){
+                    $user->setRoles(['ROLE_COMPTA']);
+                }
             }
             $this->entityManager->persist($employee);
             $this->entityManager->flush();
