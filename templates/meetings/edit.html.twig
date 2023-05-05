@@ -4,10 +4,10 @@
 
 {% block body %}
     <div class="container-md mt-5">
-        <h2>Modification du point de vente : {{ PointOfSale.name_varchar|capitalize }}</h2>
+        <h2>Modification du point de vente :</h2>
         <a class="text-primary" href="{{ path('point_of_sale') }}">Retourner aux point de vente</a>
         <div class="mt-5">
-            {{ form(pointOfsaleForm) }}
+            {{ form(meetingForm) }}
         </div>
     </div>
 {% endblock %}
