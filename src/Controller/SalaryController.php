@@ -61,7 +61,7 @@ class SalaryController extends AbstractController
             'current_menu'=>'salary'
         ]);
     }
-    #[Route('/salary/delete', name:'salary_delete')]
+    #[Route('/salary/delete/{id}', name:'salary_delete')]
     public function delete(Salary $salary)
     {
         $this->entityManager->remove($salary);

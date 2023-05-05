@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Mutual;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -34,6 +35,9 @@ class MutualFormType extends AbstractType
                     'class' => 'text-info'
                 ]
             ])
+
+            ->add('employees', EntityType::class)
+
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
                 'attr' => [

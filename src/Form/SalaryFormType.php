@@ -21,6 +21,9 @@ class SalaryFormType extends AbstractType
                 'attr'=>[
                     'placeholder'=>'entré le montant du salaire',
                     'class'=>'form-control-my-2'
+                ],
+                'label_attr' => [
+                    'class' => 'text-info'
                 ]
             ])
             ->add('overtime', TypeTextType::class,[
@@ -28,8 +31,14 @@ class SalaryFormType extends AbstractType
                 'attr'=>[
                     'placeholder'=>'entré le nombres d\'heures supplémentaires',
                     'class'=>'form-control-my-2'
+                ],
+                'label_attr' => [
+                    'class' => 'text-info'
                 ]
             ])
+
+            ->add('employees')
+
              ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
                 'attr' => [
