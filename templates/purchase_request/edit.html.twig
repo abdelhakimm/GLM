@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container-md mt-5">
-        <h2>Modification de la demande d'achat : {{ PurchaseRequest.name|capitalize }}</h2>
+        <h2>Modification de la demande d'achat :</h2>
         <a class="text-primary" href="{{ path('purchase_request') }}">Retourner aux articles</a>
         <div class="mt-5">
             {{ form(PurchaseRequestForm) }}

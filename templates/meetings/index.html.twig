@@ -33,16 +33,21 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">titre</th>
-                    <th class="text-center">option</th>
+                    <th class="text-center">title</th>
+                    <th class="text-center">place</th>
+                    <th class="text-center">description</th>
+                    <th class="text-center">participant</th>
+                    <th class="text-center">date</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for meeting in meetings %}
                     <tr>
-                        <td class="text-center">{{ meeting.createdAt|date('d-m-Y') }}</td>
-                        <td class="text-center"><a class="text-dark" target="_blank" rel="noopener noreferrer" href="#">{{ meeting.title|capitalize }}</a></td>
+                        <td class="text-center"><p class="text-dark" target="_blank" rel="noopener noreferrer"> {{ meeting.title|capitalize }} </p></td>
+                        <td class="text-center"><p class="text-dark" target="_blank" rel="noopener noreferrer"> {{ meeting.Place|capitalize }}</p></td>
+                        <td class="text-center"><p class="text-dark" target="_blank" rel="noopener noreferrer"> {{ meeting.Description|capitalize }}</p></td>
+                        <td class="text-center"><p class="text-dark" target="_blank" rel="noopener noreferrer"> {{ meeting.Attendees|capitalize }}</p></td>
+                        <td class="text-center"><p class="text-dark" target="_blank" rel="noopener noreferrer"> {{ meeting.DateTime|date('d-m-Y') }}</p></td>
                         <td class="center">
                             <div class="row d-flex justify-content-center">
                                 <div class="mx-3">

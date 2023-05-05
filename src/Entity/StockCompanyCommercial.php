@@ -18,13 +18,14 @@ class StockCompanyCommercial
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $condition = null;
+    #[ORM\Column(length: 100)]
+    private ?string $etat = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $reference = null;
+    #[ORM\Column(length: 100)]
+    private ?string $ref = null;
 
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'stockCompanyCommercials')]
+    #[ORM\JoinColumn(nullable: true)]
     private Collection $product;
 
     public function __construct()
@@ -49,26 +50,26 @@ class StockCompanyCommercial
         return $this;
     }
 
-    public function getCondition(): ?string
+    public function getEtat(): ?string
     {
-        return $this->condition;
+        return $this->etat;
     }
 
-    public function setCondition(string $condition): self
+    public function setEtat(string $etat): self
     {
-        $this->condition = $condition;
+        $this->etat = $etat;
 
         return $this;
     }
 
-    public function getReference(): ?string
+    public function getRef(): ?string
     {
-        return $this->reference;
+        return $this->ref;
     }
 
-    public function setReference(string $reference): self
+    public function setRef(string $ref): self
     {
-        $this->reference = $reference;
+        $this->ref = $ref;
 
         return $this;
     }
