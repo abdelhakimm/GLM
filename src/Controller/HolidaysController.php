@@ -70,7 +70,7 @@ class HolidaysController extends AbstractController
      {
          $this->entityManager->remove($holidays);
          $this->entityManager->flush();
-         $this->addFlash('success_theme_delete', 'votre thème a bien été supprimé');
+         $this->addFlash('success_holidays_delete', 'vos vacances ont bien été supprimé');
          return $this->redirectToRoute('holidays');
      }
 }

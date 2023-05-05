@@ -19,6 +19,9 @@ class HolidaysFormType extends AbstractType
                 'attr'=>[
                     'class'=>'form-control-my-2',
                     'format'=>'dd/mm/yyyy'
+                ],
+                'label_attr' => [
+                    'class' => 'text-info'
                 ]
             ])
             ->add('date_end', DateType::class, [
@@ -26,9 +29,16 @@ class HolidaysFormType extends AbstractType
                 'attr'=>[
                     'class'=>'form-control-my-2',
                     'format'=>'dd/mm/yyyy'
+                ],
+                'label_attr' => [
+                    'class' => 'text-info'
                 ]
             ])
             ->add('is_validated')
+
+
+            ->add('employees')
+
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
                 'attr' => [
