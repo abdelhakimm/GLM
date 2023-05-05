@@ -38,7 +38,7 @@ class MeetingsController extends AbstractController
     }
 
     /**
-     * Permet d'afficher la page des reunion
+     * Permet de creer des reunion
      */
 
      #[Route('/meeting/ajout', name: 'meeting_create')]
@@ -57,7 +57,7 @@ class MeetingsController extends AbstractController
                 'succes_meetings_create',
                 'La réunion a bien etait créer'
             );
-            return $this->redirectToRoute('meeting_create');
+            return $this->redirectToRoute('meeting');
         }
 
         return $this->render('meetings/new.html.twig', [
