@@ -8,7 +8,7 @@
         <h2>Bienvenue sur votre profil {{ user.firstname }}</h2>
         <p>C'est ici que vous pouvez consulter vos informations</p>
     </div>
-    <div class="jumbotron bg-primary text-light p-5">
+    <div>
         <p>Votre photo de profil : </p>
         <p><img class="w-25 img-fluid rounded-5" alt="PhotoDeProfil" src="{{ asset('uploads/employees/ProfilePicture/'~user.employee.profilePicture) }}" /></p>
         <p>Votre nom : {{ user.lastname }} </p>
