@@ -3,21 +3,31 @@
 {% block title %}Hello ProfileController!{% endblock %}
 
 {% block body %}
+{% for message in app.flashes('success_message_send') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
 <div class="container-md mt-5">
     <div class="jumbotron bg-primary text-light p-5 text-center">
         <h2>Bienvenue sur votre profil {{ user.firstname }}</h2>
         <p>C'est ici que vous pouvez consulter vos informations</p>
     </div>
-    <div>
-        <p>Votre photo de profil : </p>
-        <p><img class="w-25 img-fluid rounded-5" alt="PhotoDeProfil" src="{{ asset('uploads/employees/ProfilePicture/'~user.employee.profilePicture) }}" /></p>
-        <p>Votre nom : {{ user.lastname }} </p>
-        <p>Votre prénom : {{ user.firstname }} </p>
-        <p>Votre email : {{ user.email }} </p>
-        <p>Votre date de naissance : {{ user.employee.birthday|date('d/m/y') }}</p>
-        <p>Votre date d'embauche : {{ user.employee.hiringDate|date('d/m/y')}} </p>
-        <p>Votre secteur : {{ user.employee.job }} </p>
-    </div>
-    
+    <div id="divProfil">
+        <div id="infosProfil">
+            <p>Votre photo de profil : </p>
+            <p><img id="imgProfil" class="img-fluid rounded-5" alt="PhotoDeProfil" src="{{ asset('uploads/employees/ProfilePicture/'~user.employee.profilePicture) }}" /></p>
+            <p>Votre nom : <strong>{{ user.lastname }}</strong> </p>
+            <p>Votre prénom : <strong>{{ user.firstname }}</strong> </p>
+            <p>Votre email : <strong>{{ user.email }}</strong> </p>
+            <p>Votre date de naissance : <strong>{{ user.employee.birthday|date('d/m/y') }}</strong></p>
+            <p>Votre date d'embauche : <strong>{{ user.employee.hiringDate|date('d/m/y')}}</strong> </p>
+            <p>Votre secteur : <strong>{{ user.employee.job }}</strong> </p>
+        </div>
+        <div id="ProfilMessagerie">
+            {% include "messages/index.html.twig" %}
+        </div>
+    </div> 
 </div>
 {% endblock %}

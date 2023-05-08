@@ -6,3 +6,21 @@
 #logo{
     width: 11%;
 }
+#divProfil{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+}
+#imgProfil{
+    height: 100px;
+}
+#infosProfil{
+    text-align: center;
+    width: 100%;
+}
+#ProfilMessagerie{
+    width: 20%;
+    text-align: center;
+    background-color: darkgrey;
+    border-radius: 20px;
+}
