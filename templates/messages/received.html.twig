@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Messagerie</h1>
+                <h2>Boite de réception</h2>
+                <p>Vous avez reçus : {{ app.user.received|length }} messages</p>
+            </div>
+            <div class="col-3">De :</div>
+            <div class="col-3">Sujet :</div>
+            <div class="col-3">Date :</div>
+            <div class="col-3">ACtions :</div>
+            {% for message in app.user.received %}
+                {% if message.isRead == 0 %}
+                    {% set bold = "fw-bold" %}
+                {% else %}
+                    {% set bold = "" %}
+                {% endif %}
+                <div class="col-3 {{bold}}">{{ message.sender.email }}</div>
+                <div class="col-3 {{bold}}"><a href="{{path('read', {id: message.id})}}">{{ message.title }}</a></div>
+                <div class="col-3 {{bold}}">{{ message.createdAt|date("m/d/Y") }}</div>
+                <div class="col-3"><a class="btn btn-danger" href="{{path('delete', {id: message.id})}}">Supprimer</a></div>
+            {% endfor %}
+            <div class="col">
+                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    Voir mes dossiers
+                </a>
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+              <h2 class="offcanvas-title" id="offcanvasExampleLabel">Mes dossiers</h2>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <div class="list-group">
+                <a class="list-group-item list-group-item-action" href="{{path('profile')}}">Profil</a>
+                <a class="list-group-item list-group-item-action active" href="{{path('received')}}">Boite de réception</a>
+                <a class="list-group-item list-group-item-action" href="{{path('sent')}}">Boite d'envoi</a>
+              </div>
+            </div>
+          </div>
+    </section>
+{% endblock %}
